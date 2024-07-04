@@ -3,14 +3,16 @@ import os
 from pytube import YouTube
 from moviepy.editor import VideoFileClip
 
-def download_video(url, temp_video_path="temp_video.mp4"):
+def download_video(url):
     try:
         yt = YouTube(url)
         stream = yt.streams.get_highest_resolution()
+        video_title = yt.title.replace(" ", "_").replace("/", "_")  # Replace spaces and slashes with underscores
+        video_filename = f"{video_title}.mp4"
         print(f"Downloading {yt.title}...")
-        stream.download(filename=temp_video_path)
+        stream.download(filename=video_filename)
         print("Download completed!")
-        return temp_video_path
+        return video_filename
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
@@ -33,12 +35,6 @@ if __name__ == "__main__":
         print("Usage: python download_and_extract_audio.py <video_url>")
     else:
         video_url = sys.argv[1]
-        temp_video_path = "temp_video.mp4"
-        video_path = download_video(video_url, temp_video_path)
+        video_path = download_video(video_url)
         if video_path:
             extract_audio(video_path)
-            try:
-                os.remove(video_path)  # Remove the temporary video file
-                print(f"Temporary video file {video_path} deleted.")
-            except Exception as e:
-                print(f"An error occurred while deleting the temporary video file: {e}")

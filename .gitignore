@@ -163,3 +163,4 @@ cython_debug/
 
 audio_tracks/
 videos.txt
+*.mp4
